@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const { NODE_ENV } = require("./config");
 const app = express();
 const bookmarkRouter = require("./bookmarkRouter");
+const logger = require("./logger");
 
 const morganOption = NODE_ENV === "production";
 
@@ -13,7 +14,6 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(bookmarkRouter);
 
 //Adding middleware to validate Authorization header
 app.use(function validateBearerToken(req, res, next) {
@@ -26,6 +26,8 @@ app.use(function validateBearerToken(req, res, next) {
   }
   next();
 });
+
+app.use(bookmarkRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
