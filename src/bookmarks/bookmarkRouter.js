@@ -2,9 +2,10 @@ const express = require("express");
 const bookmarkRouter = express.Router();
 const { v4: uuid } = require("uuid");
 const logger = require("../logger");
-const bookmarks = require("../store");
+const store = require("../store");
 const BookmarksServices = require("./bookmarks-service");
 const bodyParser = express.json();
+const { isWebUri } = require("valid-url");
 
 const serializeBookmark = (bookmark) => ({
   id: bookmark.id,
@@ -83,7 +84,7 @@ bookmarkRouter
 
     if (bookmarkIndex === -1) {
       logger.error(`Bookmark with id ${bookmark_id} not found`);
-      return res.status(404).send("Not found");
+      return res.status(404).send("Bookmark Not Found");
     }
     store.bookmarks.splice(bookmarkIndex, 1);
 
